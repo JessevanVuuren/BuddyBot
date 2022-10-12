@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Alert, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { BuddyColors } from "../../constants/colors";
+import { storeBuddy } from "../../util/localSorage";
 import CustomButton from "../UI/CustomButton";
 import DatePicker from "../UI/DatePicker";
 
@@ -27,6 +28,8 @@ const AddPerson = ({ navigation }) => {
     }
 
     console.log("ADD")
+
+    storeBuddy({name: name, dob: date})
   }
 
   const cancel = () => {
