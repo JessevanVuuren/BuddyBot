@@ -32,7 +32,7 @@ const DatePicker = ({ onDate }) => {
   return (
     <View style={styles.container}>
       <Pressable onPress={showDatepicker} style={styles.DOBButton}>
-        <Text style={styles.DOBText}>Date Of Birth</Text>
+        <Text style={styles.DOBText}>Pick a Date</Text>
       </Pressable>
 
       {show && (
@@ -40,7 +40,6 @@ const DatePicker = ({ onDate }) => {
           testID="dateTimePicker"
           value={date}
           mode={mode}
-          is24Hour={true}
           onChange={onChange}
         />
       )}
@@ -58,13 +57,14 @@ const styles = StyleSheet.create({
     width:"100%"
   },
   DOBButton: {
-    backgroundColor: BuddyColors.mainColor,
+    // backgroundColor: BuddyColors.accent,
+    borderColor:  BuddyColors.accent,
+    borderWidth: 1,
     width:"100%",
-    borderRadius:5
+    borderRadius:5,
   },
   DOBText: {
-    color: BuddyColors.darkLight,
-    fontWeight:"bold",
+    color: BuddyColors.accent,
     textAlign:"center",
     fontSize: 25,
     paddingVertical:5
