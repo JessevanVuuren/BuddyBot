@@ -28,7 +28,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#222831"
       },
-      "package": "com.jessev.BuddyBot.dev"
+      "package": "com.jessev.BuddyBot"
     },
     "web": {
       "favicon": "./assets/favicon.png"

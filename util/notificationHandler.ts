@@ -2,6 +2,7 @@ import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 import * as Device from 'expo-device';
 import { NotificationRequest, YearlyTriggerInput } from 'expo-notifications';
+import { getValue } from './LocalStorage';
 
 
 Notifications.setNotificationHandler({
@@ -18,20 +19,6 @@ export const dismissNoti = async (id: any) => {
 
 export const dismissAllNoti = async () => {
   await Notifications.cancelAllScheduledNotificationsAsync()
-}
-
-export const schedulePushNotification = async (day: number, month: number, content: any) => {
-  const date = new Date(2023, month - 1, day, 10, 10)
-
-  const trigger: YearlyTriggerInput = {
-    "day": date.getDate(),
-    "month": date.getMonth(),
-    "hour": date.getHours(),
-    "minute": date.getMinutes(),
-    "repeats": true
-  }
-
-  await Notifications.scheduleNotificationAsync({ content: content, trigger: trigger })
 }
 
 export const getAllNotifications = async () => {
@@ -69,14 +56,31 @@ export const registerForPushNotificationsAsync = async () => {
   return token;
 }
 
+
+export const schedulePushNotification = async (day: number, month: number, content: any) => {
+  const settings = await getValue("notiSettings")
+  const date = new Date(2023, month - 1, day, settings["hoursOnDay"], 0)
+
+  const trigger: YearlyTriggerInput = {
+    "day": date.getDate(),
+    "month": date.getMonth(),
+    "hour": date.getHours(),
+    "minute": date.getMinutes(),
+    "repeats": true
+  }
+
+  await Notifications.scheduleNotificationAsync({ content: content, trigger: trigger })
+}
+
 export const stringYearlyNoti = (content: NotificationRequest) => {
   const trigger: any = content.trigger
   return trigger.hour + ":" + trigger.minute + " - " + trigger.day + "/" + (trigger.month + 1)
 }
 
-export const compareNoti = (dob: string, trigger: any): boolean => {
+export const compareNoti = (dob: string, trigger: any, hour: number): boolean => {
+
   const dob_list = dob_to_list(dob)
-  return dob_list[1] == trigger.day && dob_list[0] - 1 == trigger.month
+  return dob_list[1] == trigger.day && dob_list[0] - 1 == trigger.month && trigger.hour === hour
 }
 
 const dob_to_list = (dob: string): Array<number> => {
@@ -86,25 +90,64 @@ const dob_to_list = (dob: string): Array<number> => {
 
 const schedule_buddy_notification = (buddy: any) => {
   const dob_list = dob_to_list(buddy.DOB)
-  const content = { title: "Birthday of " + buddy.name, data: {buddy:buddy} }
+  const content = { title: "Birthday of " + buddy.name, data: { buddy: buddy } }
   schedulePushNotification(dob_list[1], dob_list[0], content)
 }
 
-export const setBuddyNotifications = async (buddys: any) => {
+export const scheduleHandler = async (buddys: any) => {
+  const settings = await getValue("notiSettings")
+  var newBuddys = JSON.parse(JSON.stringify(buddys));
+  if (settings["daysBefore"]) {
+
+    const waningList = []
+
+    for (let i = 0; i < newBuddys.length; i++) {
+      const element = newBuddys[i];
+
+      var date = new Date(element.DOB)
+      date.setDate(date.getDate() - settings["daysBefore"])
+      const newData = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
+
+      waningList.push({
+        "DOB": newData,
+        "name": "warning_" + element.name,
+        "id": element.id
+      })
+
+    }
+
+    Array.prototype.push.apply(newBuddys, waningList)
+  }
+  setBuddyNotifications(newBuddys)
+}
+
+const setBuddyNotifications = async (buddys: any) => {
+  const settings = await getValue("notiSettings")
   const all_notifications = await getAllNotifications()
+
+  if (settings["enabled"] == false) {
+    console.log("Removing " + all_notifications.length + " notifications")
+    dismissAllNoti()
+    return
+  }
+
 
   buddys.map((buddy: any) => {
     let comp = false
     for (let i = 0; i < all_notifications.length; i++) {
       const element = all_notifications[i];
       const data: any = element.content.data.buddy
-      if (compareNoti(buddy.DOB, element.trigger) && buddy.id === data.id) {
+      if (compareNoti(buddy.DOB, element.trigger, settings["hoursOnDay"]) && buddy.id === data.id) {
         comp = true
         break
       }
     }
 
-    if (!comp) schedule_buddy_notification(buddy)
+    if (!comp) {
+      console.log("Make notification for " + buddy.name + ", on date: " + buddy.DOB + " - " + settings["hoursOnDay"] + ":00")
+      schedule_buddy_notification(buddy)
+    }
+
   })
 
   all_notifications.map((noti) => {
@@ -113,12 +156,16 @@ export const setBuddyNotifications = async (buddys: any) => {
     for (let i = 0; i < buddys.length; i++) {
       const buddy = buddys[i];
       const data: any = noti.content.data.buddy
-      if (compareNoti(buddy.DOB, noti.trigger) && buddy.id === data.id) {
+      if (compareNoti(buddy.DOB, noti.trigger, settings["hoursOnDay"]) && buddy.id === data.id) {
         comp = true
         break
       }
     }
 
-    if (!comp) Notifications.cancelScheduledNotificationAsync(noti.identifier)
+    if (!comp) {
+      console.log("removing notification: " + stringYearlyNoti(noti))
+
+      Notifications.cancelScheduledNotificationAsync(noti.identifier)
+    }
   })
 }

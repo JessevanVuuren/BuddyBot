@@ -1,4 +1,4 @@
-import { registerForPushNotificationsAsync, setBuddyNotifications } from "../util/notificationHandler"
+import { registerForPushNotificationsAsync, scheduleHandler } from "../util/notificationHandler"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import PersonsList from "../components/person/PersonsList"
 import { useLayoutEffect, useState, useRef } from "react"
@@ -34,7 +34,7 @@ const AllPersons = ({ navigation }) => {
     if (isFocused) {
       (async () => {
         const allBuddys = await fetchAllBuddys()
-        setBuddyNotifications(allBuddys)
+        scheduleHandler(allBuddys)
         setBuddys(allBuddys)
       })()
     }
