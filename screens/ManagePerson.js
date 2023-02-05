@@ -3,7 +3,7 @@ import { fetchSingleBuddy, removeBuddy, saveNewBuddy, updateBuddy } from "../uti
 import ProfilePic from "../components/person/ProfilePic"
 import CustomButton from "../components/UI/CustomButton"
 import BuddyAvatar from "../components/UI/BuddyAvatar"
-import DatePicker from "../components/UI/DatePicker"
+import DatePicker from "../components/UI/DatePickerNew"
 import { BuddyColors } from "../constants/colors"
 import { moveFileToLocal } from "../util/utils"
 import { useEffect, useState } from "react"
@@ -14,6 +14,9 @@ const ManagePerson = ({ route, navigation }) => {
   const [image, setImage] = useState("")
 
   const [IsEditing, setIsEditing] = useState(false)
+
+  const [yearFeedback, setYearFeedback] = useState("")
+  const [currentDate, setCurrentDate] = useState("")
 
   const [date, setDate] = useState()
   const [name, setName] = useState()
@@ -34,12 +37,33 @@ const ManagePerson = ({ route, navigation }) => {
   }, [id])
 
 
-  const dateOfB = (date) => {
-    setDate(moment(date).format('YYYY-MM-DD'))
+  const dateOfB = (day, month, year) => {
+    setCurrentDate([year, month, day])
   }
 
+  const checkDate = () => {
+    setYearFeedback("")
+    const dateYear = new Date().getFullYear()
+    if (!currentDate[0] || +currentDate[0] > dateYear) {
+      setYearFeedback("Year can't be above " + dateYear)
+      return false
+    } 
+    if (!currentDate[0] || +currentDate[0] < dateYear - 120) {
+      setYearFeedback("Year can't be below " + (dateYear - 120))
+      return false
+    }
 
+    let dayPrefix = ""
+    let MonthPrefix = ""
+    if (+currentDate[2] < 10) {
+      dayPrefix = "0"
+    }
+    if (+currentDate[1] < 10) {
+      MonthPrefix = "0"
+    }
 
+    return currentDate[0] + "-" + MonthPrefix + (+currentDate[1] + 1) + "-" + dayPrefix + currentDate[2]
+  }
 
   const addOreUpdate = async () => {
     if (!name) {
@@ -48,15 +72,21 @@ const ManagePerson = ({ route, navigation }) => {
       return
     }
 
-    if (!date) {
-      Alert.alert("Date cannot be Null")
+    if (!currentDate) {
+      console.log("date not set")
+    }
+    const LocalDate = checkDate()
+    if (!LocalDate) {
+      console.log("date invalid")
       return
     }
 
+    console.log(LocalDate)
+
     if (!IsEditing) {
-      await saveNewBuddy({ name: name, DOB: date, URI: image })
+      await saveNewBuddy({ name: name, DOB: LocalDate, URI: image })
     } else {
-      await updateBuddy(id, { name: name, DOB: date, URI: image })
+      await updateBuddy(id, { name: name, DOB: LocalDate, URI: image })
     }
 
     if (imgData) {
@@ -89,41 +119,40 @@ const ManagePerson = ({ route, navigation }) => {
   }
 
   return (
-    <ScrollView style={styles.scrollContainer} >
-      <View style={styles.container}>
+    <View style={styles.scrollContainer}>
+      <ScrollView style={styles.scrollContainer} >
+        <View style={styles.container}>
 
+          <View style={styles.formContainer}>
 
-        <View style={styles.formContainer}>
+            <BuddyAvatar image={image} height={200} width={200} rWidth={2} />
 
-          <BuddyAvatar image={image} height={200} width={200} rWidth={2} />
+            <View style={styles.buddyNameContainer}>
+              <Text style={styles.BuddyNameText}>Buddy name</Text>
+              <TextInput style={styles.BuddyName} onChangeText={(name) => setName(name)} value={name} />
+            </View>
 
-          <View style={styles.buddyNameContainer}>
-            <Text style={styles.BuddyNameText}>Buddy name:</Text>
-            <TextInput style={styles.BuddyName} onChangeText={(name) => setName(name)} value={name} />
+            <View>
+              <Text style={styles.BuddyNameText}>Profile Picture</Text>
+              <ProfilePic saveB64Image={saveB64Image} />
+            </View>
+
+            <View style={styles.BuddyDOBContainer}>
+              <Text style={styles.BuddyNameText}>Date of birth</Text>
+
+              <DatePicker onDate={dateOfB} errorText={yearFeedback} date={date} />
+            </View>
+
           </View>
-
-          <View>
-            <Text style={styles.BuddyNameText}>Profile Picture:</Text>
-            <ProfilePic saveB64Image={saveB64Image} />
-          </View>
-
-          <View style={styles.BuddyDOBContainer}>
-            <Text style={styles.BuddyNameText}>Date of birth:</Text>
-            <DatePicker onDate={dateOfB} />
-          </View>
-
         </View>
 
-        <View style={styles.DOBcontainer}>
-          <Text style={styles.BODText}>{moment(date).format('D MMMM YYYY')}</Text>
-        </View>
-
-        <View style={styles.buttons}>
-          <CustomButton onPress={cancelOrDelete} text={IsEditing ? "REMOVE" : "CANCEL"} style={{ marginRight: 10 }} color={IsEditing ? BuddyColors.dangerRed : BuddyColors.accent} />
-          <CustomButton onPress={addOreUpdate} text={IsEditing ? "UPDATE" : "ADD"} color={BuddyColors.accent} />
-        </View>
+        <View style={{ height: 100 }} />
+      </ScrollView>
+      <View style={styles.buttons}>
+        <CustomButton onPress={cancelOrDelete} text={IsEditing ? "REMOVE" : "CANCEL"} style={{ marginRight: 10 }} color={IsEditing ? BuddyColors.dangerRed : BuddyColors.accent} />
+        <CustomButton onPress={addOreUpdate} text={IsEditing ? "UPDATE" : "ADD"} color={BuddyColors.accent} />
       </View>
-    </ScrollView>
+    </View>
   )
 }
 
@@ -137,11 +166,13 @@ const styles = StyleSheet.create({
 
   },
   container: {
+    backgroundColor: BuddyColors.background,
+
     flex: 1,
-    alignItems: "center"
+    alignItems: "center",
   },
   formContainer: {
-    width: "80%",
+    width: "90%",
     flex: 1,
   },
   DOBcontainer: {
@@ -167,10 +198,10 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   buttons: {
-    justifyContent: "space-between",
+    marginBottom: 10,
+    alignSelf: "center",
     flexDirection: "row",
-    width: "80%",
-    marginBottom: 30,
+    width: "90%",
   },
   showDate: {
     color: BuddyColors.mainColor

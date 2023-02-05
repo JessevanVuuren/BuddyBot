@@ -111,6 +111,7 @@ const styles = StyleSheet.create({
   blueLine: {
     borderBottomColor: BuddyColors.accent,
     borderBottomWidth: 2,
+    backgroundColor: "#353e4a",
   },
   container: {
     flex: 1,
@@ -150,59 +151,3 @@ const styles = StyleSheet.create({
     color: BuddyColors.textColor,
   },
 });
-
-{
-  /* <View style={styles.block}>
-          <TouchableOpacity
-            style={[styles.flexRow, { marginLeft: 26.5 }]}
-            onPress={() => {
-              setEnabled(!enabled);
-            }}
-          >
-            {enabled ? (
-              <MaterialIcons name="check-box" size={20} color={BuddyColors.accent} />
-            ) : (
-              <MaterialIcons name="check-box-outline-blank" size={20} color="white" />
-            )}
-
-            <Text style={[styles.text, { marginLeft: 3.5 }]}>Enable notifications</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.block}>
-          <View style={styles.flexRow}>
-            <View style={styles.inputBefore}>
-              <TextInput
-                placeholder="1/100"
-                value={day}
-                style={{ color: "white" }}
-                placeholderTextColor="gray"
-                keyboardType="numeric"
-                onChangeText={(t) => {
-                  setDay(t.replace(/[^0-9]/g, ""));
-                }}
-              />
-            </View>
-            <Text style={[styles.text]}>Warning notification before birthday</Text>
-          </View>
-        </View>
-
-        <View style={styles.block}>
-          <View style={styles.flexRow}>
-            <View style={styles.inputBefore}>
-              <TextInput
-                value={hour}
-                placeholder="0/23"
-                style={{ color: "white" }}
-                placeholderTextColor="gray"
-                keyboardType="numeric"
-                onChangeText={(t) => {
-                  setHour(t.replace(/[^0-9]/g, ""));
-                }}
-              />
-            </View>
-            <Text style={[styles.text]}>Notification hour of day</Text>
-          </View>
-        </View>
-      </View> */
-}
