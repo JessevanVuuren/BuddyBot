@@ -53,6 +53,7 @@ const DatePicker = ({ onDate, date }) => {
       <View style={styles.holders}>
         <View style={[styles.inputHolder]}>
           <Picker
+            itemStyle={{ color: "white" }}
             style={{ color: "white" }}
             selectedValue={selectedYear}
             dropdownIconColor={BuddyColors.accent}
@@ -66,6 +67,7 @@ const DatePicker = ({ onDate, date }) => {
         <View style={[styles.inputHolder]}>
           <Picker
             style={{ color: "white" }}
+            itemStyle={{color:"white"}}
             selectedValue={selectedMonth}
             dropdownIconColor={BuddyColors.accent}
             onValueChange={(itemValue, itemIndex) => setSelectedMonth(itemValue)}
@@ -90,6 +92,8 @@ const DatePicker = ({ onDate, date }) => {
         <View style={[styles.inputHolder]}>
           <Picker
             style={{ color: "white" }}
+            itemStyle={{ color: "white" }}
+
             selectedValue={selectedDay}
             dropdownIconColor={BuddyColors.accent}
             onValueChange={(itemValue, itemIndex) => setSelectedDay(itemValue)}
