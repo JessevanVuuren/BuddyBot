@@ -15,8 +15,7 @@ const ManagePerson = ({ route, navigation }) => {
 
   const [IsEditing, setIsEditing] = useState(false)
 
-  const [yearFeedback, setYearFeedback] = useState("")
-  const [currentDate, setCurrentDate] = useState("")
+  const [isNameValid, setIsNameValid] = useState(true)
 
   const [date, setDate] = useState()
   const [name, setName] = useState()
@@ -38,55 +37,30 @@ const ManagePerson = ({ route, navigation }) => {
 
 
   const dateOfB = (day, month, year) => {
-    setCurrentDate([year, month, day])
+    if (day !== undefined && month !== undefined && year !== undefined) {
+      let prefixDay = ""
+      let prefixMonth = ""
+      if (day < 10) prefixDay = "0"
+      if (month < 10) prefixMonth = "0"
+      const date = year + "-" + prefixMonth + (month + 1) + "-" + prefixDay + day
+      console.log(date)
+      setDate(date)
+    }
   }
 
-  const checkDate = () => {
-    setYearFeedback("")
-    const dateYear = new Date().getFullYear()
-    if (!currentDate[0] || +currentDate[0] > dateYear) {
-      setYearFeedback("Year can't be above " + dateYear)
-      return false
-    } 
-    if (!currentDate[0] || +currentDate[0] < dateYear - 120) {
-      setYearFeedback("Year can't be below " + (dateYear - 120))
-      return false
-    }
-
-    let dayPrefix = ""
-    let MonthPrefix = ""
-    if (+currentDate[2] < 10) {
-      dayPrefix = "0"
-    }
-    if (+currentDate[1] < 10) {
-      MonthPrefix = "0"
-    }
-
-    return currentDate[0] + "-" + MonthPrefix + (+currentDate[1] + 1) + "-" + dayPrefix + currentDate[2]
-  }
 
   const addOreUpdate = async () => {
+    setIsNameValid(true)
     if (!name) {
-
-      Alert.alert("Name cannot be Null")
+      setIsNameValid(false)
       return
     }
 
-    if (!currentDate) {
-      console.log("date not set")
-    }
-    const LocalDate = checkDate()
-    if (!LocalDate) {
-      console.log("date invalid")
-      return
-    }
-
-    console.log(LocalDate)
 
     if (!IsEditing) {
-      await saveNewBuddy({ name: name, DOB: LocalDate, URI: image })
+      await saveNewBuddy({ name: name, DOB: date, URI: image })
     } else {
-      await updateBuddy(id, { name: name, DOB: LocalDate, URI: image })
+      await updateBuddy(id, { name: name, DOB: date, URI: image })
     }
 
     if (imgData) {
@@ -129,7 +103,7 @@ const ManagePerson = ({ route, navigation }) => {
 
             <View style={styles.buddyNameContainer}>
               <Text style={styles.BuddyNameText}>Buddy name</Text>
-              <TextInput style={styles.BuddyName} onChangeText={(name) => setName(name)} value={name} />
+              <TextInput style={[styles.BuddyName, {borderColor: isNameValid ? BuddyColors.accent : BuddyColors.dangerRed }]} onChangeText={(name) => setName(name)} value={name} />
             </View>
 
             <View>
@@ -140,7 +114,7 @@ const ManagePerson = ({ route, navigation }) => {
             <View style={styles.BuddyDOBContainer}>
               <Text style={styles.BuddyNameText}>Date of birth</Text>
 
-              <DatePicker onDate={dateOfB} errorText={yearFeedback} date={date} />
+              <DatePicker onDate={dateOfB} date={date} />
             </View>
 
           </View>
@@ -190,7 +164,6 @@ const styles = StyleSheet.create({
     fontSize: 20
   },
   BuddyName: {
-    borderColor: BuddyColors.accent,
     borderRadius: 5,
     borderWidth: 1,
     fontSize: 20,

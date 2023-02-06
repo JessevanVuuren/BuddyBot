@@ -20,7 +20,7 @@
     "ios": {
       "supportsTablet": true,
       "bitcode": "Debug",
-      "buildNumber": "2",
+      "buildNumber": "4",
       "bundleIdentifier": "com.jessev.BuddyBot"
     },
     "android": {

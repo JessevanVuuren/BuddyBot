@@ -12,7 +12,7 @@ import { Ionicons } from '@expo/vector-icons'
 const NoBuddys = ({ onPress }) => {
   return (
     <View style={styles.noBuddysContainer}>
-      <Text style={styles.noBuddysText}>No Buddys<Text style={{ color: BuddyColors.accent }}>,</Text> yet!</Text>
+      <Text style={styles.noBuddysText}>No Buddies<Text style={{ color: BuddyColors.accent }}>?</Text> Yet<Text style={{ color: BuddyColors.accent }}>!!</Text></Text>
       <Pressable onPress={onPress} style={styles.addBuddy}>
         <Text style={styles.addBuddyText}>Add Buddy</Text>
       </Pressable>

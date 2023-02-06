@@ -2,7 +2,7 @@ import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 import * as Device from 'expo-device';
 import { NotificationRequest, YearlyTriggerInput } from 'expo-notifications';
-import { getValue } from './LocalStorage';
+import { getValue, saveValue } from './LocalStorage';
 
 
 Notifications.setNotificationHandler({
@@ -59,7 +59,9 @@ export const registerForPushNotificationsAsync = async () => {
 
 export const schedulePushNotification = async (day: number, month: number, content: any) => {
   const settings = await getValue("notiSettings")
-  const date = new Date(2023, month - 1, day, settings["hoursOnDay"], 0)
+  let time = settings["hoursOnDay"] 
+  if (time === undefined) time = "7"
+  const date = new Date(2023, month - 1, day, +time, 0)
 
   const trigger: YearlyTriggerInput = {
     "day": date.getDate(),
@@ -121,8 +123,20 @@ export const scheduleHandler = async (buddys: any) => {
   setBuddyNotifications(newBuddys)
 }
 
+const checkInit = (settings:any) => {
+  if (settings["enabled"] === undefined || settings["hoursOnDay"] === undefined || settings["daysBefore"] === undefined) {
+    const settings = {
+      "enabled": true,
+      "daysBefore": 5,
+      "hoursOnDay": 11
+    }
+    saveValue("notiSettings", settings)
+  }
+}
+
 const setBuddyNotifications = async (buddys: any) => {
   const settings = await getValue("notiSettings")
+  checkInit(settings)
   const all_notifications = await getAllNotifications()
 
   if (settings["enabled"] == false) {
