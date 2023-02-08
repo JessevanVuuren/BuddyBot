@@ -111,7 +111,7 @@ export default DatePicker
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%"
+    width: "60%",
   },
   holders: {
     // flexDirection: "row"

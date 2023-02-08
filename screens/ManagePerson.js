@@ -145,6 +145,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
   },
+  BuddyDOBContainer: {
+    width:"100%",
+    alignItems:"center"
+  },
   formContainer: {
     width: "90%",
     flex: 1,
