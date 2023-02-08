@@ -93,7 +93,6 @@ const DatePicker = ({ onDate, date }) => {
           <Picker
             style={{ color: "white" }}
             itemStyle={{ color: "white" }}
-
             selectedValue={selectedDay}
             dropdownIconColor={BuddyColors.accent}
             onValueChange={(itemValue, itemIndex) => setSelectedDay(itemValue)}
