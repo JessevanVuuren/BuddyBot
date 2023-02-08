@@ -1,5 +1,5 @@
 import { saveValue, getValue } from "../util/LocalStorage";
-import { StyleSheet, Text, View  } from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { BuddyColors } from "../constants/colors";
@@ -11,8 +11,6 @@ const Notifications = ({ route, navigation }) => {
   const [enabled, setEnabled] = useState();
   const [selectedDay, setSelectedDay] = useState();
   const [selectedHour, setSelectedHour] = useState();
-
-
 
   useLayoutEffect(() => {
     (async () => {
@@ -27,72 +25,72 @@ const Notifications = ({ route, navigation }) => {
 
   useEffect(() => {
     const settings = {
-      "enabled":enabled,
-      "daysBefore": selectedDay,
-      "hoursOnDay": selectedHour
-    }
+      enabled: enabled,
+      daysBefore: selectedDay,
+      hoursOnDay: selectedHour,
+    };
     saveValue("notiSettings", settings);
-  }, [enabled, selectedDay, selectedHour])
+  }, [enabled, selectedDay, selectedHour]);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Notifications Settings</Text>
+        <Text style={styles.title}>Notifications Settings</Text>
 
-      <View style={styles.block}>
-        <Text style={[styles.text, {}]}>Notifications</Text>
-        <View style={styles.blueLine}>
-          <Picker
-            style={styles.select}
-            selectedValue={enabled}
-            dropdownIconColor={BuddyColors.accent}
-            onValueChange={(itemValue, itemIndex) => setEnabled(itemValue)}
-            mode="dropdown"
-          >
-            <Picker.Item style={styles.items} label="Enabled" value={true} />
-            <Picker.Item style={styles.items} label="Disabled" value={false} />
-          </Picker>
+        <View style={styles.block}>
+          <Text style={[styles.text, {}]}>Notifications</Text>
+          <View style={styles.blueLine}>
+            <Picker
+              style={styles.select}
+              selectedValue={enabled}
+              dropdownIconColor={BuddyColors.accent}
+              onValueChange={(itemValue, itemIndex) => setEnabled(itemValue)}
+              mode="dropdown"
+            >
+              <Picker.Item style={styles.items} label="Enabled" value={true} />
+              <Picker.Item style={styles.items} label="Disabled" value={false} />
+            </Picker>
+          </View>
         </View>
-      </View>
 
-      <View style={styles.block}>
-        <Text style={[styles.text, {}]}>Warning notification before birthday</Text>
-        <View style={styles.blueLine}>
-          <Picker
-            style={styles.select}
-            selectedValue={selectedDay}
-            dropdownIconColor={BuddyColors.accent}
-            onValueChange={(itemValue, itemIndex) => setSelectedDay(itemValue)}
-            mode="dropdown"
-          >
-            <Picker.Item style={styles.items} label="Disabled" value={false} />
-            <Picker.Item style={styles.items} label="1 day" value={1} />
-            <Picker.Item style={styles.items} label="3 days" value={2} />
-            <Picker.Item style={styles.items} label="5 days" value={5} />
-            <Picker.Item style={styles.items} label="10 days" value={10} />
-            <Picker.Item style={styles.items} label="20 days" value={20} />
-          </Picker>
+        <View style={styles.block}>
+          <Text style={[styles.text, {}]}>Warning notification before birthday</Text>
+          <View style={styles.blueLine}>
+            <Picker
+              style={styles.select}
+              selectedValue={selectedDay}
+              dropdownIconColor={BuddyColors.accent}
+              onValueChange={(itemValue, itemIndex) => setSelectedDay(itemValue)}
+              mode="dropdown"
+            >
+              <Picker.Item style={styles.items} label="Disabled" value={false} />
+              <Picker.Item style={styles.items} label="1 day" value={1} />
+              <Picker.Item style={styles.items} label="3 days" value={2} />
+              <Picker.Item style={styles.items} label="5 days" value={5} />
+              <Picker.Item style={styles.items} label="10 days" value={10} />
+              <Picker.Item style={styles.items} label="20 days" value={20} />
+            </Picker>
+          </View>
         </View>
-      </View>
 
-      <View style={styles.block}>
-        <Text style={[styles.text, {}]}>Notification time of day</Text>
-        <View style={styles.blueLine}>
-          <Picker
-            style={styles.select}
-            selectedValue={selectedHour}
-            dropdownIconColor={BuddyColors.accent}
-            onValueChange={(itemValue, itemIndex) => setSelectedHour(itemValue)}
-            mode="dropdown"
-          >
-            <Picker.Item style={styles.items} label="05:00" value={5} />
-            <Picker.Item style={styles.items} label="07:00" value={7} />
-            <Picker.Item style={styles.items} label="09:00" value={9} />
-            <Picker.Item style={styles.items} label="11:00" value={11} />
-            <Picker.Item style={styles.items} label="13:00" value={13} />
-            <Picker.Item style={styles.items} label="15:00" value={15} />
-          </Picker>
+        <View style={styles.block}>
+          <Text style={[styles.text, {}]}>Notification time of day</Text>
+          <View style={styles.blueLine}>
+            <Picker
+              style={styles.select}
+              selectedValue={selectedHour}
+              dropdownIconColor={BuddyColors.accent}
+              onValueChange={(itemValue, itemIndex) => setSelectedHour(itemValue)}
+              mode="dropdown"
+            >
+              <Picker.Item style={styles.items} label="05:00" value={5} />
+              <Picker.Item style={styles.items} label="07:00" value={7} />
+              <Picker.Item style={styles.items} label="09:00" value={9} />
+              <Picker.Item style={styles.items} label="11:00" value={11} />
+              <Picker.Item style={styles.items} label="13:00" value={13} />
+              <Picker.Item style={styles.items} label="15:00" value={15} />
+            </Picker>
+          </View>
         </View>
-      </View>
     </View>
   );
 };
