@@ -34,7 +34,7 @@ const ProfilePic = ({ saveB64Image }) => {
     }
 
     if (cameraPermissionStatus.status === PermissionStatus.DENIED) {
-      Alert.alert("The app need camera permission to work", "For pictures")
+      Alert.alert("The app need's camera and storage permissions", "These pictures will be used as profile pictures for your buddys")
       return false
     }
 

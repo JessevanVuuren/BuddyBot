@@ -34,6 +34,7 @@ const Notifications = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
+      <ScrollView>
         <Text style={styles.title}>Notifications Settings</Text>
 
         <View style={styles.block}>
@@ -42,6 +43,7 @@ const Notifications = ({ route, navigation }) => {
             <Picker
               style={styles.select}
               selectedValue={enabled}
+              itemStyle={{ color: "white" }}
               dropdownIconColor={BuddyColors.accent}
               onValueChange={(itemValue, itemIndex) => setEnabled(itemValue)}
               mode="dropdown"
@@ -58,6 +60,7 @@ const Notifications = ({ route, navigation }) => {
             <Picker
               style={styles.select}
               selectedValue={selectedDay}
+              itemStyle={{ color: "white" }}
               dropdownIconColor={BuddyColors.accent}
               onValueChange={(itemValue, itemIndex) => setSelectedDay(itemValue)}
               mode="dropdown"
@@ -78,6 +81,7 @@ const Notifications = ({ route, navigation }) => {
             <Picker
               style={styles.select}
               selectedValue={selectedHour}
+              itemStyle={{ color: "white" }}
               dropdownIconColor={BuddyColors.accent}
               onValueChange={(itemValue, itemIndex) => setSelectedHour(itemValue)}
               mode="dropdown"
@@ -91,6 +95,7 @@ const Notifications = ({ route, navigation }) => {
             </Picker>
           </View>
         </View>
+      </ScrollView>
     </View>
   );
 };
@@ -107,6 +112,7 @@ const styles = StyleSheet.create({
     backgroundColor: BuddyColors.background,
   },
   blueLine: {
+    width: "60%",
     borderBottomColor: BuddyColors.accent,
     borderBottomWidth: 2,
     backgroundColor: "#353e4a",
@@ -126,6 +132,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   block: {
+    alignItems: "center",
     marginTop: 50,
   },
   errorText: {

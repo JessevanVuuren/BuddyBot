@@ -20,8 +20,11 @@
     "ios": {
       "supportsTablet": true,
       "bitcode": "Debug",
-      "buildNumber": "5",
-      "bundleIdentifier": "com.jessev.BuddyBot"
+      "buildNumber": "7",
+      "bundleIdentifier": "com.jessev.BuddyBot",
+      "infoPlist": {
+        "NSCamera​Usage​Description": "The app would like to get an access to your camera to take a profile photo, These pictures will be used as profile pictures for your buddys"
+      }
     },
     "android": {
       "versionCode": 3,
@@ -46,8 +49,8 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "The app accesses your photos to let you share them with your friends.",
-          "cameraPermission": "The app needs access to your camera"
+          "photosPermission": "The app would like to get an access to your camera to take a profile photo, These pictures will be used as profile pictures for your buddys",
+          "cameraPermission": "The app would like to get an access to your camera to take a profile photo, These pictures will be used as profile pictures for your buddys"
         }
       ]
     ]
