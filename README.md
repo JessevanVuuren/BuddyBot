@@ -1,22 +1,12 @@
 # BuddyBot
 
-- [react-native](https://reactnative.dev/)
-- [expo](https://expo.dev/)
 
+Introducing a brand new app that will ensure you never miss a loved one's birthday again! This app is designed to help you keep track of all the important birthdays in your life, from your closest friends to your dearest family members.
 
-## steps to reproduce
-1. git clone https://github.com/JessevanVuuren/BuddyBot.git
-2. cd /BuddyBot/
-3. npm i
+With this app, you'll receive timely notifications for each upcoming birthday so you can plan ahead and make sure you have the perfect gift or message ready. And if you ever forget a birthday, don't worry - the app has got you covered with last-minute reminders.
 
-## build - android
-1. update build number and version number in app.json
-2. aab: eas build 
-3. apk: eas build --profile dev
+Downloading this app is easy - it's available for both iOS and Android devices, and you can find it on the App Store or Play Store. Once you've installed it, simply add your loved ones' birthdays, and the app will take care of the rest.
 
-## build IOS - submit
-1. update build and version number in ./ios/BuddyBot/info.plist // build = CFBundleVersion // version = CFBundleShortVersionString
-2. eas build
-3. eas submit
+Don't let another birthday slip by unnoticed - download this app today and stay on top of all the important dates in your life!
 
-
+[Get the app here!](https://play.google.com/store/apps/details?id=com.jessev.BuddyBot&hl=en&gl=US)
